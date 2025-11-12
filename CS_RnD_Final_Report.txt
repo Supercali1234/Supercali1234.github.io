@@ -1,0 +1,488 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={6.5 in, 9.5 in}]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning, arrows, graphs, shapes, arrows.meta, decorations, decorations.markings}
+\usepackage{tikz-3dplot}
+
+\hypersetup{
+    %colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=black,  %choose some color ihttps://www.overleaf.com/project/605ec34857ad17edc9ee7f75f you want links to stand out
+}
+%\title{projlimit}
+
+\usepackage{inputenc, mathtools, amssymb, graphicx, amsthm, physics}
+%\usepackage{kpfonts}
+\usepackage{xcolor}
+\renewcommand{\PV}[1]{\mathbb{P}{#1}}
+\newcommand{\Mat}{\text{Mat}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Sn}{\mathbb{S}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\Hb}{{\cal H}_b}
+\newcommand{\eat}[1]{}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{assume}[theorem]{Assumption}
+\newcommand{\ignore}[1]{}
+\newcommand{\mf}[1]{\mathfrak{#1}}
+\newcommand{\reform}{\text{ref}}
+\newcommand{\sgn}{\text{sgn}}
+\newcommand{\mfg}{\mathfrak{g}}
+\newcommand{\mfi}{\mathfrak{i}}
+\newcommand{\mfj}{\mathfrak{j}}
+\newcommand{\mfgl}{\mathfrak{g}\mathfrak{l}}
+\newcommand{\mfn}{\mathfrak{n}}
+\newcommand{\mfh}{\mathfrak{h}}
+\newcommand{\Rad}{\text{Rad}}
+\renewcommand{\Tr}{\text{Tr}}
+\newcommand{\Hom}{\text{Hom}}
+\renewcommand{\ker}{\text{ker}}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\id}{\text{Id}}
+\newcommand{\adg}{\text{ad}_\mfg}
+\newcommand{\ad}{\text{ad}}
+\renewcommand{\kill}{\kappa_\mfg}
+
+\newtheorem*{remark*}{Remark}
+% Complexity classes
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\BPP}{\mathrm{BPP}}
+\newcommand{\DTIME}{\mathrm{DTIME}}
+\newcommand{\ZPTIME}{\mathrm{ZPTIME}}
+\newcommand{\BPTIME}{\mathrm{BPTIME}}
+\newcommand{\NTIME}{\mathrm{NTIME}}
+
+%convinient command for absolute value and norm
+%\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+%\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+\DeclarePairedDelimiter\subgrp{\langle}{\rangle}%
+
+%determinant and permanent
+\newcommand{\Det}{\mathop{Det}}
+\newcommand{\Perm}{\mathop{Perm}}
+
+\title{RnD Project Final Report}
+\author{Shantanu Nene 20B090011}
+\date{April 2024}
+
+\begin{document}
+
+\maketitle
+
+In this RnD project, we study orbits and orbit closures of complex algebraic groups acting rationally on a finite dimensional vector space. To that end, we study representations of Lie algebras, and use Lie group - Lie algebra correspondence. At the end, we prove the celebrated Hilbert-Mumford theorem about stability of orbits. \\
+
+All vector spaces, Lie algebras and varieties are assumed to be over $\C$.
+
+\section{Solvable Lie Algebras}
+
+\begin{definition}
+    Let $V$ be a vector space of dimension $n$. Then $\mfgl(V)$ is the Lie algebra on vector space of endomorphisms of $V$ with Lie bracket $[x,y]=xy-yx$.
+\end{definition}
+
+\begin{definition}
+    Let $\mfg$ be a Lie algebra. Then for any $x \in \mfg$, define $\adg(x)$ as the linear map $\adg(x)(y)=[x,y]$.
+\end{definition}
+
+Note that $\adg$ is a representation of $\mfg$. We just use $\ad$ when the Lie algebra is evident. \\
+
+Recall the Jordan decomposition of a matrix: 
+
+\begin{theorem}[Jordan-Chevalley Decomposition]
+    Let $V$ be a finite dimensional vector space, and let $x \in \mfgl(V)$.
+    \begin{itemize}
+        \item[(a)] There exist $x_s, x_n \in \mfgl(V)$ such that $x_s$ is diagonalizable, $x_n$ is nilpotent, and $x=x_s+x_n$. Further, this decomposition is unique.
+        \item[(b)] There exist polynomials $P,Q \in \C[t]$ without constant terms such that $P(x)=x_s$ and $P(x)=x_s^*$. (Here $x_s^*$ is the conjugate transpose of $x_s$.)
+        \item[(c)] The linear map $\ad(x)$ has Jordan decomposition $\ad(x)_s=\ad(x_s)$ and $\ad(x)_n=\ad(x_n)$.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    Parts (a) and (b) follow from the Jordan Canonical Form for matrices. Now note that the endomorphisms $y \to x_ny$ and $y \to yx_n$ are nilpotent, and they commute, so by binomial theorem, by taking a sufficient large power, we get that their difference $\ad(x_n)$ is also nilpotent. We now prove that $\ad(x_s)$ is diagonalizable. To that end, let $\{v_1, \dots, v_m\}$ be an eigenbasis of $V$ w.r.t. $x_s$. Let $e_{i,j}$ be the endomorphism sending $v_i$ to $v_j$, and everything else to zero. Clearly $e_{i,j}$ is a basis of $\mfgl(V)$, and it is easy to see that it must be an eigenbasis w.r.t. $\ad(x_s)$, which proves that it is diagonalizable. Hence Part (c) is proved due to uniqueness of Jordan decomposition.
+\end{proof}
+
+\begin{definition}
+     Let $\mfg$ be a Lie algebra. Define a decreasing sequence of ideals $C_i(\mfg)$, called the central series of $\mfg$ by: $C_0(\mfg)=\mfg$ and $C_{i+1}(\mfg)=[\mfg,C_i(\mfg)]$ for all $i \geq 0$. Then, $\mfg$ is called nilpotent if $C_n(\mfg)=0$ for some $n$.
+\end{definition}
+
+We state (without proof) a special case of Engel's theorem, which we will use later.
+
+\begin{theorem}[Engel's Theorem for Matrix Algebras]
+    Let $V$ be a finite dimensional vector space and $\mfg$ be a Lie subalgebra of $\mfgl(V)$. Suppose every element of $\mfg$ is nilpotent, then $\mfg$ is a nilpotent Lie algebra.
+\end{theorem}
+% \begin{proof}
+%     We first prove that there exists a $v \in V$ such that $x(v)=0$ for all $x \in \mfg$. We prove this by induction on $\dim(\mfg)$.
+% \end{proof}
+
+\subsection{Cartan's Criterion}
+
+\begin{definition}
+    Let $\mfg$ be a Lie algebra. Define a decreasing sequence of ideals $D_i(\mfg)$, called the derived series of $\mfg$ by: $D_0(\mfg)=\mfg$ and $D_{i+1}(\mfg)=[D_i(\mfg),D_i(\mfg)]$ for all $i \geq 0$. Then, $\mfg$ is called solvable if $D_n(\mfg)=0$ for some $n$.
+\end{definition}
+
+The following is the most crucial result in proving solvability of some Lie algebra:
+
+\begin{theorem}[Cartan's Criterion for Solvability]
+    Let $V$ be a finite dimensional vector space and $\mfg$ be a Lie subalgebra of $\mfgl(V)$. Suppose for all $x \in [\mfg,\mfg]$ and $y \in \mfg$, $\Tr(x y)=0$. Then $\mfg$ is solvable.
+\end{theorem}
+\begin{proof}
+    Let $x \in [\mfg,\mfg]$ be arbitrary. Let $x=x_s+x_n$ be the Jordan decomposition of $x$, where $x_s$ is diagonalizable and $x_n$ is nilpotent. Let $\lambda_1, \dots, \lambda_n$ be the eigenvalues of $x$, which are also the eigenvalues of $x_s$. Write everything as matrices w.r.t. the basis in which $x$ has the Jordan Canonical Form. Then $x_s$ is a diagonal matrix, so $xx_s^*$ is upper triangular with $|\lambda_i|^2$ on the diagonal. 
+
+    Write $x=\sum_{i=1}^m [y_i,z_i]$ for $y_i,z_i \in \mfg$. Thus
+    $$\sum_{i=1}^n |\lambda_i|^2 = \Tr(xx_s^*) = \sum_{i=1}^m \Tr([y_i,z_i]x_s^*).$$
+    We rewrite each term in the RHS:
+    $$\Tr([y_i,z_i]x_s^*)=\Tr(z_i[x_s^*,y_i])=\Tr(z_i\ad(x_s^*)(y_i)).$$
+    The first equality holds because $[y_i,z_i]x_s^*-z_i[x_s^*,y_i]=[y_i,z_ix_s^*]$, which has trace $0$. Now, by the theorem about Jordan decomposition, there exists a polynomial $Q \in \C[t]$ without a constant term such that
+    $$\ad(x_s^*)=\ad(x_s)^*=Q(\ad(x)).$$
+    Write $Q(t)=\sum_{j=1}^k c_j t^j$. Then $\ad(x_s^*)(y_i)=\sum_{j=1}^k c_j \ad(x)^jy_i$. Further, $\ad(x)^jy_i \in [\mfg,\mfg]$ because $j \geq 1$. Hence $\ad(x_s^*)(y_i) \in [\mfg, \mfg]$, so by the given condition
+    $$\Tr(z_i\ad(x_s^*)(y_i))=\Tr(\ad(x_s^*)(y_i)z_i)=0.$$
+    This proves $$\sum_{i=1}^n |\lambda_i|^2=0,$$ so all eigenvalues of $x$ are $0$, which implies that $x$ is nilpotent. \\
+
+    Therefore, all elements of $[\mfg,\mfg]$ are nilpotent, so by Engel's theorem, $[\mfg,\mfg]$ is nilpotent; in particular it is solvable. Hence is $\mfg$ is solvable, as required.
+\end{proof}
+
+\newpage
+
+\section{Semisimple Lie Algebras}
+
+\begin{definition}
+    A Lie algebra $\mfg$ is called simple if it is non-abelian and has no proper non-zero ideals.
+\end{definition}
+
+\begin{definition}
+    A Lie algebra $\mathfrak{g}$ is called semisimple if it has no non-zero abelian ideal.
+\end{definition}
+
+It is easy to see that sum of any two solvable ideals is also solvable, so the following definition makes sense.
+
+\begin{definition}
+    For a Lie algebra $\mfg$, the radical $\Rad(\mfg)$ is defined to be its greatest solvable ideal.
+\end{definition}
+
+\begin{lemma}
+    A non-zero Lie algebra $\mfg$ is semisimple iff $\Rad(\mfg)=0$.
+\end{lemma}
+\begin{proof}
+    Clearly, any abelian ideal of $\mfg$ is contained in $\Rad(\mfg)$, so the condition is necessary. Conversely, if $\Rad(\mfg)$ is non-zero, then the last non-zero ideal in its derived series is the required abelian ideal, making $\mfg$ not semisimple.
+\end{proof}
+
+\subsection{Killing Form}
+
+\begin{definition}
+    Let $\mfg$ be a Lie algebra, and let $\beta: \mfg \times \mfg \to \C$ be a bilinear form. Then $\beta$ is called invariant if $\beta(x,[y,z])=\beta([x,y],z)$ for all $x,y,z \in \mfg$.
+\end{definition}
+
+Note that $\Tr(x y)$ is an invariant bilinear form on $\mfgl(V)$. Indeed, trace of $[x,y]$ is always zero, so trace of $[x,y]z-x[y,z]=[y,xz]$ is zero.
+
+\begin{lemma}
+    Let $\mfg$ be a finite dimensional semisimple Lie algebra, and let $(V,f)$ be a faithful finite dimensional representation of $\mfg$. Then the map $\beta_f(x,y)=\Tr(f(x) f(y))$ is an invariant, non-degenerate and symmetric bilinear form on $\mfg$.
+\end{lemma}
+\begin{proof}
+    $\beta_f$ is clearly bilinear and symmetric. Further, since $\Tr$ is invariant, so is $\beta_f$. So now we prove non-degeneracy. Consider the kernel $\ker(\beta_f)$, i.e., set of all $x$ such that $\beta_f(x,y)=0$ for all $y \in \mfg$. Since $\beta_f$ is invariant, the kernel is a Lie ideal of $\mfg$. Since $f$ is faithful, $f( \ker (\beta_f))$ is a Lie subalgebra of $\mfgl(V)$ isomorphic to $\ker (\beta_f)$. Now apply Cartan's criteria, whose condition trivially holds for $f(\ker(\beta_f))$, so it is solvable, and hence so is $\ker(\beta_f)$. But since $\mfg$ is semisimple, it has no non-zero solvable ideals, so $\ker(\beta_f)=0$, which implies $\beta_f$ is non-degenerate.
+\end{proof}
+
+We have an example of a faithful representation: namely, $\adg$ on $\mfg/\ker(\adg)$. This motivates the following definition:
+
+\begin{definition}[Killing Form]
+    The Killing form on $\mfg$ is the bilinear form $\kill(x,y)=\Tr(\adg(x)\adg(y))$.
+\end{definition}
+
+Clearly $\kill$ is symmetric and invariant. Cartan's criterion implies that $\mfg$ is solvable if $[\mfg,\mfg] \subset \ker(\kill)$ (as long as finite dimensional). The Killing form allows us to get a nice criterion for semisimple algebras:
+
+\begin{theorem}[Cartan-Killing Criterion]
+    Let $\mfg$ be a finite dimensional Lie algebra. Then $\mfg$ is semisimple iff $\kill$ is non-degenerate.
+\end{theorem}
+\begin{proof}
+    We first show that $\ker(\kill) \subset \Rad(\mfg)$ for any Lie algebra. Indeed, if $\mfi=\ker(\kill)$, then $\mfi$ is a Lie ideal of $\mfg$. The Killing form $\kill$ restricted to $\mfi \times \mfi$ is the Killing form on $\mfi$; this follows because image of $\adg(x)$ for $x \in \mfi$ is in $\mfi$. Thus the Killing form $\kappa_\mfi$ is zero, which implies $\mfi$ is solvable. Hence $\mfi \subset \Rad(\mfg)$, as required. This proves that $\mfg$ semisimple $\implies$ $\kill$ is non-degenerate. \\
+
+    For the other direction, we first prove that $\ker(\adg)=0$. Indeed, $\ker(\adg)$ is an abelian ideal of $\mfg$, so it is zero since $\mfg$ is semisimple. So $\adg$ is a faithful representation of $\mfg$, so by Lemma 2.6, $\kill$ is non-degenerate.
+
+    % For the other direction, we show that any abelian ideal of $\mfg$ is contained in $\ker(\kill)$, for any Lie algebra. Indeed, let $[\mfj,\mfj]=0$, and let $x \in \mfj$. Then, $\adg(y)\adg(x)\adg(y)(z) \in \mfj$ for any $y,z \in \mfg$ by direct calculation. Hence $\adg(x)\adg(y)\adg(x)\adg(y)=0$. Therefore $\adg(x)\adg(y)$ is zero when squared, so its trace is zero. This implies $x \in \ker(\kill)$, for all $x \in \mfj$, so $j \subset \ker(\kill)$. This proves that $\kill$ is non-degenerate $\implies$ $\mfg$ semisimple.
+\end{proof}
+
+\subsection{Structure of Semisimple Lie Algebras}
+
+\begin{definition}
+    Let $\mfg$ be a semisimple Lie algebra. For any Lie ideal $\mfi$, define $\mfi^\perp$ to be the ideal of all elements $y$ such that $\kill(x,y)=0$ for all $x \in \mfi$.
+\end{definition}
+
+\begin{lemma}
+    Let $\mfg$ be a finite dimensional semisimple Lie algebra. Then for any ideal $\mfi$, both $\mfi$ and $\mfi^\perp$ are semisimple as Lie algebras, and $\mfi \oplus \mfi^\perp = \mfg$.
+\end{lemma}
+\begin{proof}
+    Since $\kill$ is non-degenerate, $\mfg=\mfi \oplus \mfi^\perp$ holds. In particular, $[\mfi,\mfi^\perp] \subset \mfi \cap \mfi^\perp = 0$, which implies $[\mfi, \mfg]=[\mfi,\mfi]$. Thus any ideal of $\mfi$ is an ideal of $\mfg$, which proves that the former is also semisimple.
+\end{proof}
+
+Note that the above lemma also proves that every quotient of $\mfg$ is semisimple: Indeed, $\mfg/\mfi \cong \mfi^\perp$.
+
+\begin{theorem}
+    Let $\mfg$ be a non-zero semisimple Lie algebra. Then
+    \begin{itemize}
+        \item[(a)] There exists $t \in \mathbb{N}$ and ideals $\mfj_1, \dots, \mfj_t \in \mfg$ that are simple as Lie algebras, such that
+        $$\mfg=\bigoplus_{i=1}^t \mfj_i$$
+        \item[(b)] If $s$ is any ideal of $\mfg$ that is a simple Lie algebra, then $\mfj=\mfj_i$ for some $i$.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    For Part (a), just choose a simple ideal of $\mfg$ (exists because any minimal non-abelian ideal would be simple). Then just use Lemma 2.10 repeatedly to get the required decomposition. This can be done since $\mfg$ is finite dimensional. \\
+
+    Now, let $\mfj$ be any ideal of $\mfg$ that is simple as a Lie algebra. Then $[\mfj,\mfg]$ is an ideal of $\mfj$, and it is non-zero because $\ker(\adg)=0$. Hence
+    $$\mfj=[\mfj,\mfg]= \bigoplus_{i=1}^t [\mfj,\mfj_i].$$
+    So by simplicity of $\mfj$ and $\mfj$, $\mfj=\mfj_i=[\mfj,\mfj_i]$ for some $i$.
+\end{proof}
+
+\begin{corollary}
+    If $\mfg$ is semisimple Lie algebra, then $\mfg=[\mfg,\mfg]$.
+\end{corollary}
+\begin{proof}
+    By the proof of Part (b) of Theorem 2.11, $[\mfj_i,\mfj_i]=\mfj_i$, and $[\mfj_i,\mfj_k]=0$ for all $i \neq k$. Hence
+    $$[\mfg,\mfg]=\bigoplus_{1 \leq i,k \leq t} [\mfj_i,\mfj_k]= \mfg=\bigoplus_{i=1}^t \mfj_i=\mfg.$$
+\end{proof}
+
+\newpage
+
+\section{Complete reducibility of Finite Dimensional Representations}
+
+\subsection{The Casimir Element}
+
+
+
+\begin{lemma}
+    Let $\mfg$ be a finite dimensional semisimple Lie algebra, $\beta$ be an invariant, non-degenerate and symmetric bilinear form on $\mfg$, and let $(V,f)$ be a representation of $\mfg$. Let $(x_1, \dots, x_n)$ be a basis of $\mfg$ and let $(y_1, \dots, y_n)$ be its dual basis wrt $\beta$. Then, the element
+    $$c=\sum_{i=1}^n f(x_i)f(y_i)$$
+    is a $\mfg$-invariant endomorphism of $(V,f)$.
+\end{lemma}
+\begin{proof}
+    Let $z \in \mfg$ be arbitrary. Suppose
+    $$[z,x_i]=\sum_{j=1}^n a_{i,j} x_j \text{   and   } [z,y_i] = \sum_{j=1}^n b_{i,j} y_j$$
+    for all $1 \leq i \leq n$. By invariance of $\beta$,
+    $$a_{i,j}=\beta([z,x_i],y_j)=-\beta([x_i,z],y_j)=-\beta(x_i,[z,y_j])=-b_{j,i}.$$
+    Hence,
+    \begin{align*}
+        f(z)c-cf(z) &= [f(z),c] \\
+        &= \sum_{i=1}^n [f(z),f(x_i)f(y_i)] \\
+        &= \sum_{i=1}^n [f(z),f(x_i)]f(y_i) +\sum_{i=1}^n f(x_i)[f(z),f(y_i)] \\
+        &= \sum_{1 \leq i,j \leq n} a_{i,j} f(x_j)f(y_i) + \sum_{1 \leq i,j \leq n} b_{i,j} f(x_i) f(y_j) \\
+        &= \sum_{1 \leq i,j \leq n} (a_{i,j}+b_{j,i}) f(x_j)f(y_i) \\
+        &= 0.
+    \end{align*}
+    This proves $c$ is $\mfg$-invariant, as required.
+\end{proof}
+
+Such a $c$ is called the Casimir element. Observe that $\Tr(c)=\dim(\mfg) \neq 0$. If $(V,f)$ is a faithful and finite dimensional representation of $\mfg$, we have a natural invariant non-degenerate symmetric bilinear form $\beta_f(x,y)=\Tr(f(x)f(y))$, as proved in Lemma 2.6. Thus when we mention ``Casimir element of a representation", this is the bilinear form we are using.
+
+\subsection{Weyl's Theorem}
+
+\begin{lemma}
+    Let $\mfg$ be a finite dimensional semisimple Lie algebra, and let $(V,f)$ be a finite dimensional representation of $\mfg$. If $W$ is a codimension $1$ subrepresentation of $(V,f)$, then there exists a subrepresentation $X$ of $(V,f)$ such that $V=W \oplus X$.
+\end{lemma}
+\begin{proof}
+    We proceed by induction on $\dim(V)$. If $\dim(V)=1$, the claim is trivial. So now assume $\dim(V)>1$, and let $W$ be a subrepresentation of $V$ with codimension $1$. Note that, by going modulo the kernel of $f$, we may assume $(V,f)$ is a faithful representation.
+
+    First assume $W$ is simple. Consider the Casimir element $c$ of $V$; it is a $\mfg$-invariant endomorphism of $V$. Since $\mfg=[\mfg,\mfg]$, $\mfg$ acts trivially on one-dimensional representations; in particular on $V/W$. Therefore $f(V) \subset W$, and so $c(V) \subset W$. Further, by Schur's lemma, $c$ is a scalar on $W$, say multiplication by $\lambda \in \C$. Since $\Tr(c) \neq 0$, $\lambda \neq 0$, and so $c(V)=W$ and $c$ is an isomorphism on $W$. Therefore $\ker(c)$ is a one-dimensional subrepresentation of $V$ that intersects $W$ only at $0$, and so is a direct summand of $W$.
+
+    Now assume $W$ is not simple. Consider a proper non-zero representation $W'$ of $W$. Let $(V/W',g)$ be the quotient representation, and let $\pi:V \rightarrow V/W'$ be the projection map. Then $\pi(W)$ has codimension $1$ in $V/W'$, and $\dim(V/W')<\dim(V)$. So by induction hypothesis, there exists a subrepresentation $W_1$ of $V$ such that $W' \subset W_1$ and $V/W'=\pi(W) \oplus \pi(W_1)$. $\pi(W_1)$ has dimension $1$, so $\dim(W_1)=\dim(W')+1<\dim(V)$. Hence applying the induction hypothesis to $W_1$, we get a subrepresentation $W_2$ of $V$ having dimension $1$ such that $W_1=W' \oplus W_2$. Note that $\dim(W)+\dim(W_2)=\dim(V)$. Further, $W$ and $W_2$ are disjoint, because $W \cap W_1 = W'$ but $W_2$ is disjoint from $W'$. Thus $V=W \oplus W_2$, as required.
+\end{proof} 
+
+\begin{theorem}[Weyl's Theorem]
+    Let $\mfg$ be a finite dimensional semisimple Lie algebra. Then any finite  dimensional representation of $\mfg$ is completely reducible. More strongly, any subrepresentation is a direct summand.
+\end{theorem}
+\begin{proof}
+    Let $(V,\rho)$ be a finite dimensional representation. If it is simple, we are done. Else, let $W$ be a proper non-zero subrepresentation of $V$. Consider $\Hom(V,W)$ as a representation of $\mfg$, via the map $\mu$ given by $$(\mu(x)(f))(w)=(\rho(x)\circ f)(w)-(f \circ \rho(x))(w).$$ Let $\V$ and $\W$ be subspaces of $\Hom(V,W)$ consisting of maps that are scalar and $0$ respectively on $W$. Then for any $f \in \V$,$x \in \mfg$ and $w \in W$, by definition $(\mu(x)(f))(w)=0$. Therefore $\V, \W$ are subrepresentations of $\Hom(V,W)$, and $\mfg$ sends $\V$ to $\W$. Also from definition, $\W$ is a codimension $1$ subspace of $\V$.
+
+    Now, applying the above lemma, there exists a one dimensional representation of $\V$ that is a direct summand of $\W$. Say the representation is generated by $f$; WLOG $f|_W=\id_W$. Then since $\mfg=[\mfg,\mfg]$, $\mfg$ acts trivially on $\C f$. Therefore $\ker(f)$ is a subrepresentation of $V$, and since $f$ is identity on $W$, $\ker(f) \cap W =(0)$. Therefore by a dimension argument, $\ker(f)$ is a direct summand of $W$.
+\end{proof}
+
+\newpage
+
+\section{Linear Algebraic Groups}
+
+In this section, the topology that we will be using is the Zariski topology.
+
+\begin{definition}[Linear Algebraic Group]
+      A subgroup $G \subset \text{GL}_n(\C)$ is called a linear algebraic group if $G$ is an affine variety as viewed as a subset of $\C^{n^2}$. % Given a variety $X$ on which $G$ acts, we say $G$ acts morphically if the map $G \times X \to X$ of the action is a morphism.
+\end{definition}
+
+It is not hard to prove that $e$, i.e., the identity is a simple point (in the Zariski topology) for a linear algebraic group $G$. Thus we can talk about the tangent space at identity, which can be looked at as the space of derivations at $e$. This has a Lie algebra structure, and this will be the Lie algebra associated with $G$. We will generally denote groups with capital letters and their corresponding Lie algebras with mathfrak letters. The topology that we use is the standard Zariski topology. \\
+
+We use the notation $\bigwedge^d V$ to denote the $d^{th}$ exterior power of a vector space $V$. Since exterior products are quotients of tensor products, there is a natural extension of action (of Lie group or algebra) on $V$ to action on  exterior power.
+
+\begin{lemma}[Action on Exterior Powers]
+    Let $W$ be a vector space, and let $M$ be a $d$-dimensional subspace of $W$. Let $L=\bigwedge^d M$ and $V=\bigwedge^d W$. Then for any $X \in \text{GL}(W)$ and $x \in \mfgl(W)$,
+    \begin{itemize}
+        \item[(a)]  $X \cdot L = L$ iff $X \cdot M = M$.
+        \item[(b)] $x \cdot L \subset L$ iff $x \cdot M \subset M$.
+    \end{itemize}
+\end{lemma}
+\begin{proof}
+    In each case, the``if" part is obvious. For Part (a), choose a basis $\{w_1,\dots, w_n\}$ of $W$ such that first $d$ vectors form a basis for $M$, and such that $X \cdot M$ is spanned by $w_{l+1}, \dots, w_{l+d}$ for some $l \geq 0$. Since $L$ is the one-dimensional vector space spanned by $w_1 \wedge \cdots \wedge w_d$, $X$ sends this vector to some non-zero multiple of itself. However, clearly this image must lie in the vector space spanned by $w_{l+1}\wedge \cdots \wedge w_{l+d}$, which implies $l=0$. \\
+
+    For Part (b), choose a basis of $M$ such that $x$ maps the first part into a basis of $x \cdot M$, and sends all other basis vectors outside $M$. Choose $y \in \mfgl(W)$ which agrees with $x$ on the first part, while send the other basis vectors to $0$. Clearly $y$ leaves $M$ stable, so we can replace $x$ by $x-y$, and assume $M$ intersects $x \cdot M$ trivially. Now, suppose $w_1, \dots, w_d$ is the chosen basis so that $x \cdot w_1, \dots, x \cdot w_c$ is a basis of $x \cdot M$, and $x \cdot w_i=0$ for all $i \geq c+1$. Note that $w_1,\dots, w_d, x \cdot w_1, \dots, x \cdot w_c$ are linearly independent by assumption. Now,
+    $$x \cdot (w_1 \wedge \cdots \wedge w_d) = \sum_{i=1}^d w_1 \wedge \cdots \wedge (x \cdot w_i) \wedge \cdots \wedge w_d.$$
+    This, by assumption is a multiple of $w_1 \wedge \cdots \wedge w_d$. But the vectors $w_1 \wedge \cdots \wedge (x \cdot w_i) \wedge \cdots \wedge w_d$, for $1 \leq i \leq c$, are linearly independent with $w_1 \wedge \cdots \wedge w_d$, which is impossible unless $c=0$. Thus $x \cdot M = 0$, which clearly is a subset of $M$. 
+\end{proof}
+
+\begin{theorem}[Chevalley's Theorem]
+    Let $G$ be a linear algebaric group, and let $H$ be a closed subgroup. Then there is a rational representation $\phi:G \to \text{GL}(V)$ and a on-dimensional subspace $L$ of $V$ such that
+    $$H=\{X \in G \mid \phi(X)L=L\},$$
+    $$\mfh=\{x \in \mfg \mid d\phi(x)L \subset L\}.$$
+\end{theorem}
+\begin{proof}
+    The idea is to look at action of $G$ on the space of polynomial functions on $G$, via $(g \cdot f)(x)=f(g^{-1}x)$ (this is the standard left regular representation). Let $I$ be the ideal of functions that are $H$-invariant. Since $H$ is Zariski-closed, it is precisely the stabilizer of $I$. Indeed, $H$ is a subset of the stabilizer trivially, and if $g \notin H$, then by looking at $G \setminus H$ which is a dense open neighborhood of $g$, we can find a polynomial $f \in I$ such that $f(g)=1$. Then $(g^{-1} \cdot f)(e)=f(g)=1 \notin I$, so $g$ cannot stabilize $I$.
+
+    Now, by Hilbert's Basis Theorem, $I$ is finitely generated, say by $f_1,\dots, f_n$. As we had proved in the course, $I$ can be contained in a finite-dimensional $G$-stable vector space $W$ (this was proved using the fact that group action can be thought of as an element of the tensor product). Let $M=W \cap I$. Then $f_1, \dots, f_n \in M$, so if $g$ stabilizes $M$, then it also stabilizes $I$, so $g \in H$. The converse is obvious, so $H$ is precisely the stabilizer of $M$.
+
+    All that remains is to compress $M$ into a one-dimensional space. However, this can be done by the above Lemma by taking $V= \bigwedge^d W$ and $L=\bigwedge^d M$, where $d= \dim(M)$.
+\end{proof}
+
+\begin{theorem}
+    Let $G$ be a linear algebraic group, and let $N$ be a closed normal subgroup of $G$. Then there is a rational representation $\psi: G \to \text{GL}(V)$ such that $N= \ker(\psi)$ and $\mfn= \ker (d\psi)$.
+\end{theorem}
+\begin{proof}
+    Use Chevalley's theorem to construct a morphism $\phi:G \to \text{GL}(V)$ and a line $L$ in $V$ whose stabilizer in $G$ (resp. $\mfg$) is $N$ (resp. $\mfn$). Let $\chi$ be a character of $N$, i.e., a morphism $N \to \C^*$. Let $V_{\chi}$ be the subspace of $V$ such that $N$ acts on $V_{\chi}$ via $\chi$; i.e., $x \cdot v = \chi(x)v$ for all $x \in N$ and $v \in V_{\chi}$. Consider the sum of all such $V_{\chi}$. This sum is  direct (because of Dedekind's theorem on characters), and thus only finitely many $V_{\chi}$ appear. Further, since $N$ is normal, it is not hard to see that $\phi(G)$ just permutes the $V_{\chi}$. So, we can assume $V$ is just the direct sum of $V_{\chi}$, WLOG.
+
+    Let $W$ be the subspace of $\text{End}(V)$ consisting of endomorphisms that stabilize each $V_{\chi}$. We have a natural isomorphism $W \cong \bigsqcup \text{End}(V_{\chi})$. Note that $\text{GL}(V)$ acts on $\text{End}(V)$ via conjugation. Then, $\phi(G)$ stabilizes $W$, because $W$ stabilizes all $V_{\chi}$ and $\phi(G)$ just permutes the $V_{\chi}$. Thus we get a representation $\psi:G \to \text{GL}(W)$, which is $\phi$, followed by conjugation, followed by restriction to $W$. This is clearly a rational representation.
+
+    It remains to analyze the kernels. If $x \in N$, then $\phi(x)$ acts as a scalar on each $V_{\chi}$, so conjugating by $\phi(x)$ has no effect on $W$, i.e., $x \in \ker(\phi)$. Conversely, suppose $\psi(x)=e$. Then $\phi(x)$ stabilizes all $V_{\chi}$ and commutes with $\text{End}(V_{\chi})$, which is only possible if $\phi(x)$ acts as a scalar on each $V_{\chi}$. But, $L$ as defined above lies in one of the $V_{\chi}$, and $\phi(x)$ acts as a scalar on it, so by Chevalley's theorem, $x \in N$, as required.
+
+    To analyze $\ker(d\phi)$, we take differentials. Note that differential of the conjugation map is $\ad$. Hence, if $x \in \mfn$, then $d\phi(x)$ acts as a scalar on each $V_{\chi}$, so $\ad(d\phi(x))=0$ on $W$, i.e., $x \in \ker(d\phi)$. Conversely, if $\ad(d\phi(x))=0$ on $W$, then $d\phi(x)$ stabilizes each $V_{\chi}$ and commutes with $\text{End}(V_{\chi})$. Hence it acts as a scalar on each $V_{\chi}$, so $d \phi(x) L \subset L$, which forces $x \in \mfn$ by Chevalley's theorem.
+\end{proof}
+
+\subsection{Algebraic Group - Lie Algebra Correspondence}
+
+\begin{theorem}[Algebraic Group - Lie Algebra correspondence]
+    The following are true for a linear algebraic group $G$:
+    \begin{itemize}
+        \item[(a)] If $\phi: G \to G'$ is a morphism of linear algebraic groups, then $\ker(d\phi)$ is the Lie algebra associated with $\ker(\phi)$.
+        \item[(b)] If $I,J$ are closed subgroups of $G$, then $\mfi \cap \mfj$ is the Lie algebra associated with $I \cap J$.
+        \item[(c)] If $G$ is connected, there is a one-to-one and inclusion preserving correspondence between closed connected subgroups of $G$ and their corresponding Lie algebras. 
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    For Part (a), we can WLOG assume $\phi$ is surjective, and we can think of it as an isomorphism from $G \to G/\ker(\phi)$. Then, the theorem follows from the construction done in Theorem 4.4.
+
+    For Part (b), let $\pi:G \to G/J$ be the canonical morphism. Consider the restriction $\pi':I \to \pi(I)$. Note that we can identify $\pi(I)$ with $I/I \cap J$. Hence, by Part (a), the Lie algebra associated with $I \cap J$ is $\ker(d\pi')=\mfi \cap \ker(d \pi) = \mfi \cap \mfj$.
+
+    Part (c) follows immediately from the first two parts.
+\end{proof}
+
+\begin{theorem}
+    Let $G$ be a connected linear algebraic group, and let $H$ be a closed connected subgroup. Then $\mfh$ is an ideal of $\mfg$ iff $H$ is normal in $G$.
+\end{theorem}
+\begin{proof}
+''If" part follows from Theorem 4.3, since a kernel is always an ideal. Now assume $\mfh$ is an ideal. Let $N=\{x \in G \mid x^{-1}Hx=H\}$. Taking differentials, we see that $$\mfn=\{x \in \mfg \mid [x,\mfh] \subset \mfh\}=\mfg,$$
+    since $\mfh$ is an ideal. Because $G$ is connected, by the group-algebra correspondence, this forces $G=N$, which implies $H$ is normal.
+\end{proof}
+
+\subsection{Semisimple Groups}
+
+\begin{definition}
+    A linear algebraic group $G$ is called semisimple if it has no closed connected commutative normal subgroup except $e$.
+\end{definition}
+
+\begin{theorem}
+    A connected linear algebraic group $G$ is semisimple iff $\mathfrak{g}$ is semisimple.
+\end{theorem}
+\begin{proof}
+    Suppose $\mfg$ is semisimple. If $N$ is  a closed connected commutative normal subgroup of $G$, then $\mfn$ is a commutative ideal. So $\mfn=0$, forcing $N=e$.
+
+    Conversely, assume $\mfn$ is commutative. Look at the ideal $$\mfh=\{y \in \mfg \mid [x,y]=0 \text{ for all } x \in \mfn\}.$$
+    This contains $\mfn$ since it is commutative. Now, Theorem 4.5 implies that $H$ is normal; as a result, the connected component of the center of $H$ that contains the identity is also normal. But $G$ is semisimple, so this is identity, which implies that the corresponding Lie algebra is $0$. The corresponding Lie algebra would have been set of all $y$ such that $[x,y]=0$ for all $x \in \mfh$, which contains $\mfn$. Hence $\mfn=0$, as required.
+\end{proof}
+
+The above theorem implies that we can switch between semisimple groups and their semisimple Lie algebras. This means we can carry over a lot of results, including complete reducibility of representations, to semisimple groups (and rational representations). The groups for which complete reducibilty holds are called reductive groups; thus all semisimple groups are reductive.
+
+\newpage
+
+\section{Hilbert-Mumford Theorem}
+
+We present a fairly elementary proof of the Hilbert-Mumford theorem, which uses the following lemma:
+
+\begin{lemma}
+    Let $m_{i,j}$ for $1 \leq i \leq r$ and $1 \leq j \leq n$ be integers satisfying the following property: If $b_1, \dots, b_r$ are integers, not all zero, such that
+    $$\sum_{i=1}^r b_i m_{i,j} = 0  \ \ \  \forall 1 \leq j \leq n,$$
+    then some two of the $b_i$ have opposite sign. Then, there exist integers $c_j$ such that
+    $$\sum_{j=1}^n m_{i,j} c_j > 0 \ \ \ \forall 1 \leq i \leq r.$$
+\end{lemma}
+\begin{proof}
+    It is enough to prove the statement for rationals $c_i$, and just scale later. Also, the given condition holds for rationals $b_i$, by scaling. It translates to the kernel of the linear map $$M:(b_1,\dots,b_r) \to (\sum_{i=1}^r b_i m_{i,1}, \dots, \sum_{i=1}^r b_i m_{i,n})$$
+    intersecting the cone of non-negative entries in $\Q^r$ only at the origin. Thus, due to density of $\Q$ in $\R$, it intersects non-negative cone of $\R^r$ only at the origin. Consider the map $M^t$. Note that $\ker(M)$ and $\Im(M^t)$ are orthogonal complements in $\R^r$. \\
+    
+    We show the following: If $K$ is a subspace of $\R^r$ that intersects the non-negative cone only at origin, then $K^\perp$ intersects the interior of the cone. Suppose $K$ has co-dimension $k \geq 2$. Consider the image of the non-negative cone in the projection $\R^r/K \cong \R^k$; call it $D$. Clearly $D$ is closed. Further, $\R^k \setminus \{0\}$ is connected since $k \geq 2$, so $D$ and $-D$ cannot cover $\R^k \setminus \{0\}$, so there is a non-zero vector $v \in \R^k$ such that $\R v \cap D \setminus \{0\} = \varnothing$. Thus if we add the pull-back of $v$ to $K$, we get a subspace of one higher dimension, which also intersects the non-negative cone only at $0$. Keep doing this until we get $K$ having codimension $1$. Then, suppose $K$ is the hyperplane $\sum_{i=1}^r \lambda_i x_i=0$. Since $K$ intersects non-negative cone only at the origin, all the $\lambda_i$ must be non-zero and have the same sign, WLOG all positive. Then $(\lambda_1, \dots, \lambda_r) \in K^\perp$ is a vector that is in the interior of the cone, as required. \\
+
+    Applying the above property to $\ker(M)$, we get that some vector in $\Im(M^t)$ lies in interior of the non-negative cone. By scaling and using density of rationals, we can assume this vector $(c_1, \dots, c_n)$ to have integer entries. This vector satisfies the precise condition that we want.
+\end{proof}
+
+The Hilbert-Mumford theorem gives a nice characterization of unstable points in terms of one parameter subgroups.
+
+\begin{theorem}
+    Let $G$ be a reductive group acting linearly on a vector space $V$. Let $v \in V$ be $G$-unstable, i.e., the closure of the orbit $\overline{G \cdot v}$ contains $0$. Then there exists a one-parameter subgroup $\lambda: \C^* \to G$ such that $\lim_{t \to 0} \lambda(t) \cdot v =0$.
+\end{theorem}
+
+Before we prove this theorem, we would need another lemma relating unstable points in $G$ to unstable points in the maximal torus $T$:
+
+\begin{lemma}
+    Let $T \leq G$ be a maximal torus in $G$, and suppose $v \in V$ is $G$-unstable. Then the orbit $G \cdot v$ contains a vector $u$ which is $T$-unstable.
+\end{lemma}
+\begin{proof}
+    We skip the proof here, but the key idea is: In a reductive group, the set of elements conjugate to the maximal torus form an open dense subset of $G$. If these set of elements is $G_s$, we can also show that $G_s \cdot v$ is an open dense subgroup of $G \cdot v$, which will prove the lemma.
+\end{proof}
+
+Now we can finally prove the theorem.
+
+\begin{proof}
+    Moving to the torus, we can assume $v$ is $T$-unstable.  Hence $V$ can be split into different weight classes. More concretely, we can write any $v \in V$ as $\sum_{i=1}^r v_i$ where $T$ acts by scalar multiplication on each $v_i$. Suppose 
+    $$(t_1,t_2, \dots, t_n) \cdot v_i = t_1^{m_{i,1}} \cdots t_n^{m_{i,n}} v_i.$$
+    for all $1 \leq i \leq r$ and $(t_1, \dots, t_n) \in T$. \\
+
+    We claim that $m_{i,j}$ satisfy the conditions of Lemma 5.1. Indeed, assume there are integers $b_i$, not all zero and of the same sign, such that
+    $$\sum_{i=1}^r b_i m_{i,j} = 0  \ \ \  \forall 1 \leq j \leq n.$$
+    Let $t^{(k)} \in T$ be a sequence such that $t^{(k)} \cdot v \rightarrow 0$, which exists since $v$ is $T$-unstable. This means
+    $$(t_1^{(k)})^{m_{i,1}} \cdots (t_n^{(k)})^{m_{i,n}} \rightarrow 0$$
+    for all $1 \leq i \leq r$, as $k \rightarrow \infty$. WLOG suppose $b_1 \neq 0$. Then we can rewrite
+    $$m_{1,j} = - \frac{b_2}{b_1} m_{2,j} - \cdots - \frac{b_r}{b_1} m_{r,j}$$
+    for all $j$. Thus,
+    $$t_1^{-m_{1,1}} \cdots t_n^{-m_{1,n}} = (t_1^{m_{2,1}} \cdots t_1^{m_{2,n}})^{\frac{b_2}{b_1}} \cdots (t_1^{m_{r,1}} \cdots t_1^{m_{r,n}})^{\frac{b_r}{b_1}}.$$
+    Note that each $\frac{b_i}{b_1} \geq 0$. Now let $t_i$ run over $t_i^{(k)}$. As $k \to \infty$, the RHS tends to zero, while the LHS is the reciprocal of a quantity tending to zero, contradiction!. \\
+
+    Hence $m_{i,j}$ satisfy the conditions of Lemma 5.1, so there exist integers $c_j$ such that 
+    $$\sum_{j=1}^n m_{i,j} c_j > 0 \ \ \ \forall 1 \leq i \leq r.$$
+    Now, consider the $1$-P.S. $\lambda(t)=\diag(t^{c_1}, \dots, t^{c_n})$. Now, 
+$$\lambda(t) \cdot v = \sum_{i=1}^r t^{\sum_{j=1}^n m_{i,j} c_j}v_i,$$
+which tends to $0$ as $t \to 0$, as required.
+\end{proof}
+
+\newpage
+
+\section{References}
+
+\begin{enumerate}
+    \item Linear Algebraic Groups. Author: James E. Humphreys.
+    \item Complex Semisimple Lie Algebras notes, by Laboratoire d’analyse, géométrie et application. \href{https://www.math.univ-paris13.fr/~rigal/Cours-ALSSC-ppp-2021-12-12.pdf}{Link}.
+    \item Proof of Cartan's Criterion for Solvability notes, by Alison Miller, Harvard. \href{https://canvas.harvard.edu/files/2110788/download?download_frd=1&verifier=tgjml5Wq1LXz2b8d2HBrBqrCggYUk0FVyFuLC0Bz}{Link}.
+    \item An Elementary Proof of the Hilbert-Mumford Criterion. Author: B. Sury (2000). \href{https://www.isibang.ac.in/~sury/hilbmumf.pdf}{Link}.
+\end{enumerate}
+
+\end{document}
